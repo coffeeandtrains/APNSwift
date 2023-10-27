@@ -67,6 +67,15 @@ public struct APNSLiveActivityNotification<ContentState: Encodable>: APNSMessage
         }
     }
     
+    public var alert: APNSAlertNotificationContent? {
+        get {
+            return self.aps.alert
+        }
+        set {
+            self.aps.alert = newValue
+        }
+    }
+    
     /// A canonical UUID that identifies the notification. If there is an error sending the notification,
     /// APNs uses this value to identify the notification to your server. The canonical form is 32 lowercase hexadecimal digits,
     /// displayed in five groups separated by hyphens in the form 8-4-4-4-12. An example UUID is as follows:
@@ -148,13 +157,15 @@ public struct APNSLiveActivityNotification<ContentState: Encodable>: APNSMessage
         contentState: ContentState,
         event: APNSLiveActivityNotificationEvent,
         timestamp: Int,
-        dismissalDate: APNSLiveActivityDismissalDate = .none
+        dismissalDate: APNSLiveActivityDismissalDate = .none,
+        alert: APNSAlertNotificationContent? = nil
     ) {
         self.aps = APNSLiveActivityNotificationAPSStorage(
             timestamp: timestamp,
             event: event.rawValue,
             contentState: contentState,
-            dismissalDate: dismissalDate.dismissal
+            dismissalDate: dismissalDate.dismissal,
+            alert: alert
         )
         self.apnsID = apnsID
         self.expiration = expiration
